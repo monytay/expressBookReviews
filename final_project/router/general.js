@@ -47,8 +47,19 @@ if (matching_books.length > 0) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const title = req.params.title;
+    const matchingBooks = [];
+
+    for (let key in books) {
+        if (books[key].title === title) {
+            matchingBooks.push(books[key]);
+        }
+    }
+    if (matchingBooks.length > 0) {
+        return res.status(200).json(matchingBooks);
+    } else {
+        return res.status(404).send("No books matching the title found.");
+    }
 });
 
 //  Get book review
