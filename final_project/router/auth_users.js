@@ -9,13 +9,14 @@ let users = [{
 }];
 
 const isValid = (username)=>{
-    return !users.includes(username);
+    return users.some(user => user.username === username);
 }
 
 const authenticatedUser = (username,password)=>{
-    const user = users.find(user_case => user_case.username === username && user_case.password === password);
-    user ? true:false;
-}
+    return username.some(user_case => user_case.username === username && user_case.password === password);
+};
+
+const SECRET_KEY = 'default_key'
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
@@ -36,6 +37,7 @@ regd_users.post("/login", (req,res) => {
         return res.status(401).json({message: "Invalid username and/or password"})
     }
 });
+
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
