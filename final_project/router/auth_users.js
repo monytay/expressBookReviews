@@ -13,17 +13,17 @@ const isValid = (username)=>{
 }
 
 const authenticatedUser = (username,password)=>{
-    return username.some(user_case => user_case.username === username && user_case.password === password);
+    return users.some(user_case => user_case.username === username && user_case.password === password);
 };
 
-const SECRET_KEY = 'default_key'
+const SECRET_KEY = process.env.SECRET_KEY || 'default key';
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
     const {username,password} = req.body;
 
     if(!username || !password){
-        res.status(400).json({Message:"Username and password required"})
+        return res.status(400).json({Message:"Username and password required"})
     };
 
     if (authenticatedUser(username,password)){
@@ -34,7 +34,7 @@ regd_users.post("/login", (req,res) => {
             token: token
         });
     } else {
-        return res.status(401).json({message: "Invalid username and/or password"})
+        return res.status(401).json({message: "Invalid credentials"})
     }
 });
 
