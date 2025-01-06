@@ -20,31 +20,34 @@ public_users.post("/register", (req,res) => {
     res.status(200).json({message: "User succesfully registered"});
 });
 
-// Get the book list available in the shop
-public_users.get('/',function (req, res) {
-        let promise = new Promise ((resolve) => {
-            setTimeout (() => {
-                resolve("Fetching information(Promise)");
-            },1000);
+public_users.get('/', function (req, res) {
+    let promise = new Promise((resolve) => {
+        setTimeout(() => {
+            console.log("Fetching information...");
+        }, 1000); // First log after 1 second
+
+        setTimeout(() => {
+            if (books) {
+                resolve(books); // Resolve the promise with books
+            } else {
+                reject("No books found");
+            }
+        }, 4000); // Resolve/reject after 4 seconds
+    });
+
+    promise
+        .then((books) => {
+            res.status(200).json({
+                message: "Fetching information... Books fetched successfully!",
+                data: books
+            });
+        })
+        .catch((error) => {
+            res.status(400).json({ message: "Error occurred while processing the request", error });
         });
-         let promise2 = new Promise ((resolve,reject) => {
-            setTimeout(() => {
-                if(books){
-                    resolve(books);
-                }else{
-                    reject("No books found");
-                }
-            }, 3000);
-         });
-
-            promise.then((successMessage) =>{
-                console.log("From callback" + successMessage)
-            })
-
-            promise2.then((successMessage) => {
-                console.log("From callback" + successMessage)
-            })          
 });
+
+
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
