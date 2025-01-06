@@ -24,18 +24,26 @@ public_users.post("/register", (req,res) => {
 public_users.get('/',function (req, res) {
         let promise = new Promise ((resolve) => {
             setTimeout (() => {
-                resolve(books);
-            },2000);
+                resolve("Fetching information(Promise)");
+            },1000);
         });
+         let promise2 = new Promise ((resolve,reject) => {
+            setTimeout(() => {
+                if(books){
+                    resolve(books);
+                }else{
+                    reject("No books found");
+                }
+            }, 3000);
+         });
 
-        promise
-            .then((books) =>{
-                console.log("Information is being retrieved")
-                res.status(200).json(books)
+            promise.then((successMessage) =>{
+                console.log("From callback" + successMessage)
             })
-            .catch((error) =>{
-                res.status(400).json({message:"Error occured while processing the request"});
-            })
+
+            promise2.then((successMessage) => {
+                console.log("From callback" + successMessage)
+            })          
 });
 
 // Get book details based on ISBN
