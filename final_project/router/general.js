@@ -22,7 +22,20 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-    res.send(JSON.stringify(books,null,4));
+        let promise = new Promise ((resolve) => {
+            setTimeout (() => {
+                resolve(books);
+            },2000);
+        });
+
+        promise
+            .then((books) =>{
+                console.log("Information is being retrieved")
+                res.status(200).json(books)
+            })
+            .catch((error) =>{
+                res.status(400).json({message:"Error occured while processing the request"});
+            })
 });
 
 // Get book details based on ISBN
