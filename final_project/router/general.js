@@ -53,12 +53,24 @@ public_users.get('/', function (req, res) {
 public_users.get('/isbn/:isbn',function (req, res) {
   const isbn = req.params.isbn;
 
-  if(books[isbn]) {
-    return res.status(201).send(books[isbn]);
-  } else {
-    return res.status(401).send({error : "ISBN not found."});
-  }
- });
+  let promise = new Promise((resolve,error) => {
+    let book = books[isbn];
+
+    setTimeout(() => {
+        console.log("fetching information ...")
+    },1000)
+
+    setTimeout(() => {
+        if(book){
+            console.log(book);
+            resolve(book);
+        }else{
+            console.log("Book not found");
+            reject("No books found");
+        }
+    },4000);
+  });
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
@@ -70,12 +82,22 @@ public_users.get('/author/:author',function (req, res) {
         matching_books.push(books[key]);
     }
 
-
-if (matching_books.length > 0) {
-    return res.status(201).json(matching_books);
-} else {
-    return res.status(404).send("No books found matching the author.");
-}
+    let promise = new Promise((resolve,error) => {
+  
+      setTimeout(() => {
+          console.log("fetching information ...")
+      },1000)
+  
+      setTimeout(() => {
+          if(matching_books){
+              console.log(matching_books);
+              resolve(matching_books);
+          }else{
+              console.log("Author not found");
+              reject("Author not found");
+          }
+      },4000);
+    });
 
 });
 
@@ -89,11 +111,24 @@ public_users.get('/title/:title',function (req, res) {
             matchingBooks.push(books[key]);
         }
     }
-    if (matchingBooks.length > 0) {
-        return res.status(200).json(matchingBooks);
-    } else {
-        return res.status(404).send("No books matching the title found.");
-    }
+
+    let promise = new Promise((resolve,error) => {
+  
+        setTimeout(() => {
+            console.log("fetching information ...")
+        },1000)
+    
+        setTimeout(() => {
+            if(matchingBooks){
+                console.log(matchingBooks);
+                resolve(matchingBooks);
+            }else{
+                console.log("Title not found");
+                reject("Title not found");
+            }
+        },4000);
+      });
+    
 });
 
 //  Get book review
